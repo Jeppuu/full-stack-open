@@ -1,19 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
+import axios from "axios";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import PeopleList from "./components/PeopleList";
 
 const App = () => {
-  const [people, setPeople] = useState([
-    { id: 1, name: "Jane Doe", phone: "040-123456" },
-    { id: 2, name: "John Smith", phone: "040-987654" },
-    { id: 3, name: "Alice Johnson", phone: "040-555555" },
-    { id: 4, name: "Bob Brown", phone: "040-111111" },
-  ]);
+  const [people, setPeople] = useState([]);
   const [newName, setNewName] = useState("");
   const [newPhone, setNewPhone] = useState("");
   const [filter, setFilter] = useState("");
+
+  useEffect(() => {
+    console.log("Effect");
+    axios.get("http://localhost:3001/people").then((response) => {
+      console.log("Promise fulfilled");
+      setPeople(response.data);
+    });
+  }, []);
 
   const handleAddPerson = (event) => {
     event.preventDefault();

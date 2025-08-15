@@ -1,0 +1,8 @@
+{
+  "people": [
+    { "id": 1, "name": "Jane Doe", "phone": "040-123456" },
+    { "id": 2, "name": "John Smith", "phone": "040-987654" },
+    { "id": 3, "name": "Alice Johnson", "phone": "040-555555" },
+    { "id": 4, "name": "Bob Brown", "phone": "040-111111" }
+  ]
+}
