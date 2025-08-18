@@ -4,12 +4,14 @@ import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import PeopleList from "./components/PeopleList";
 import peopleService from "./services/people";
+import Snackbar from "./components/Snackbar";
 
 const App = () => {
   const [people, setPeople] = useState([]);
   const [newName, setNewName] = useState("");
   const [newPhone, setNewPhone] = useState("");
   const [filter, setFilter] = useState("");
+  const [snackbarMessage, setSnackbarMessage] = useState(null);
 
   // Fetch initial data from the server
   useEffect(() => {
@@ -28,7 +30,26 @@ const App = () => {
         )
       ) {
         const person = people.find((p) => p.name === newName);
-        updatePhone(person, newPhone);
+
+        peopleService
+          .updatePhone(person, newPhone)
+          .then((updatedPerson) => {
+            setPeople(
+              people.map((p) => (p.id === person.id ? updatedPerson : p))
+            );
+            changeSnackbarMessage(
+              `Updated ${newName}'s phone number.`,
+              "success"
+            );
+          })
+          .catch((error) => {
+            console.error("Error updating phone:", error);
+            changeSnackbarMessage(
+              `Information of ${newName} has already been removed from server`,
+              "error"
+            );
+            setPeople(people.filter((p) => p.id !== person.id));
+          });
       }
       return;
     }
@@ -43,6 +64,7 @@ const App = () => {
       setPeople(people.concat(returnedPerson));
       setNewName("");
       setNewPhone("");
+      changeSnackbarMessage(`Added ${newName} to phonebook.`, "success");
     });
   };
 
@@ -54,21 +76,28 @@ const App = () => {
     peopleService.deletePerson(person.id).then(() => {
       setPeople(people.filter((p) => p.id !== person.id));
     });
-  };
-
-  const updatePhone = (person, newPhone) => {
-    peopleService.updatePhone(person, newPhone).then((updatedPerson) => {
-      setPeople(people.map((p) => (p.id === person.id ? updatedPerson : p)));
-    });
+    changeSnackbarMessage(`Deleted ${person.name} from phonebook.`, "success");
   };
 
   const filteredPeople = people.filter((person) =>
     person.name.toLowerCase().includes(filter.toLowerCase())
   );
 
+  const changeSnackbarMessage = (message, type) => {
+    setSnackbarMessage({ text: message, type: type });
+    setTimeout(() => {
+      setSnackbarMessage(null);
+    }, 4000);
+  };
+
+  console.log("Snackbar message: ", snackbarMessage);
   return (
     <>
       <h1>Phonebook</h1>
+      <Snackbar
+        message={snackbarMessage}
+        onClose={() => setSnackbarMessage(null)}
+      />
       <Filter value={filter} onChange={(e) => setFilter(e.target.value)} />
       <PersonForm
         newName={newName}
