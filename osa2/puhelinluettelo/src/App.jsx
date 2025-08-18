@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import axios from "axios";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import PeopleList from "./components/PeopleList";
+import peopleService from "./services/people";
 
 const App = () => {
   const [people, setPeople] = useState([]);
@@ -11,41 +11,60 @@ const App = () => {
   const [newPhone, setNewPhone] = useState("");
   const [filter, setFilter] = useState("");
 
+  // Fetch initial data from the server
   useEffect(() => {
     console.log("Effect");
-    axios.get("http://localhost:3001/people").then((response) => {
-      console.log("Promise fulfilled");
-      setPeople(response.data);
+    peopleService.getAll().then((data) => {
+      setPeople(data);
     });
   }, []);
 
   const handleAddPerson = (event) => {
     event.preventDefault();
     if (people.some((person) => person.name === newName)) {
-      alert(`${newName} is already added to phonebook`);
+      if (
+        window.confirm(
+          `${newName} is already added to phonebook. Replace old number with a new one?`
+        )
+      ) {
+        const person = people.find((p) => p.name === newName);
+        updatePhone(person, newPhone);
+      }
       return;
     }
 
     const personObject = {
-      id: Date.now(),
       name: newName,
       phone: newPhone,
     };
 
-    setPeople(people.concat(personObject));
-    setNewName("");
-    setNewPhone("");
+    peopleService.addPerson(personObject).then((returnedPerson) => {
+      console.log("Added:", returnedPerson);
+      setPeople(people.concat(returnedPerson));
+      setNewName("");
+      setNewPhone("");
+    });
+  };
+
+  const handleDeletePerson = (person) => {
+    console.log("Deleting:", person);
+    if (!window.confirm(`Are you sure you want to delete ${person.name}?`)) {
+      return;
+    }
+    peopleService.deletePerson(person.id).then(() => {
+      setPeople(people.filter((p) => p.id !== person.id));
+    });
+  };
+
+  const updatePhone = (person, newPhone) => {
+    peopleService.updatePhone(person, newPhone).then((updatedPerson) => {
+      setPeople(people.map((p) => (p.id === person.id ? updatedPerson : p)));
+    });
   };
 
   const filteredPeople = people.filter((person) =>
     person.name.toLowerCase().includes(filter.toLowerCase())
   );
-
-  // console.log("People:", people);
-  // console.log("New Name:", newName);
-  // console.log("New Phone:", newPhone);
-  // console.log("Filtered People:", filteredPeople);
-  // console.log("Filter:", filter);
 
   return (
     <>
@@ -59,7 +78,11 @@ const App = () => {
         onSubmit={handleAddPerson}
       />
       <h2>Numbers:</h2>
-      <PeopleList people={filteredPeople} filter={filter} />
+      <PeopleList
+        people={filteredPeople}
+        filter={filter}
+        onDelete={handleDeletePerson}
+      />
     </>
   );
 };

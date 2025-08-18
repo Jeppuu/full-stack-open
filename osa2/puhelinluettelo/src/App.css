@@ -12,6 +12,16 @@
   gap: 0.4em;
 }
 
+.person {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0.4em;
+  border-bottom: 1px solid #eeeeee8e;
+}
+
 input {
   border: 1px solid #ccc;
   border-radius: 8px;
