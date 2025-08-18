@@ -23,9 +23,11 @@ function App() {
     axios
       .get(`https://studies.cs.helsinki.fi/restcountries/api/all`)
       .then((res) => {
+        console.log(res.data);
         const filtered = res.data.filter((country) =>
           country.name.common.toLowerCase().includes(query.toLowerCase())
         );
+        console.log("filtered:", filtered);
         setCountries(filtered);
         setSelectedCountry(filtered.length === 1 ? filtered[0] : null);
         setError(null);

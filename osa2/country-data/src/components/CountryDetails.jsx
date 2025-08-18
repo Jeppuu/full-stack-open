@@ -4,7 +4,7 @@ const CountryDetails = ({ country }) => {
       <img
         className="country-flag"
         src={country.flags.svg}
-        alt={`Flag of ${country.name.common}`}
+        alt={country.flags.alt}
         width={120}
       />
       <h2 className="country-name">{country.name.common}</h2>
