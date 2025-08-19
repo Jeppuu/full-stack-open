@@ -41,6 +41,7 @@ function App() {
       });
   }, [query]);
 
+  console.log("query: ", query);
   return (
     <>
       <h1>Country Search</h1>
@@ -49,10 +50,14 @@ function App() {
       {error && <p style={{ color: "red" }}>{error}</p>}
       {!loading && !error && (
         <>
-          {countries.length > 10 && (
+          {!query && null}
+          {countries.length === 0 && query && (
+            <p>No countries found matching "{query}"</p>
+          )}
+          {query && countries.length > 10 && (
             <p>Too many matches, please refine your search.</p>
           )}
-          {countries.length > 1 && countries.length <= 10 && (
+          {query && countries.length > 1 && countries.length <= 10 && (
             <CountryList countries={countries} onSelect={setSelectedCountry} />
           )}
           {selectedCountry && <CountryDetails country={selectedCountry} />}

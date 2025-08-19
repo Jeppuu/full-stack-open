@@ -1,4 +1,15 @@
+import Weather from "./Weather";
+
 const CountryDetails = ({ country }) => {
+  const lat = country.latlng[0];
+  const lng = country.latlng[1];
+  const capital = country.capital?.[0];
+  const apiKey = import.meta.env.VITE_WEATHER_API_KEY;
+
+  console.log("Lat:", lat);
+  console.log("Lng:", lng);
+  console.log("Capital:", capital);
+
   return (
     <div className="country-details flex-container">
       <img
@@ -25,6 +36,9 @@ const CountryDetails = ({ country }) => {
             </li>
           ))}
       </ul>
+      {lat && lng && capital && apiKey && (
+        <Weather lat={lat} lon={lng} capital={capital} apiKey={apiKey} />
+      )}
     </div>
   );
 };
