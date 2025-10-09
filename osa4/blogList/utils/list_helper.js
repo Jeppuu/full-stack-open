@@ -17,8 +17,26 @@ const favouriteBlog = (blogs) => {
   );
 };
 
+const mostBlogs = (blogs) => {
+  if (!blogs || blogs.length === 0) return null;
+
+  const authorCounts = blogs.reduce((counts, { author }) => {
+    counts[author] = (counts[author] || 0) + 1;
+    return counts;
+  }, {});
+
+  const mostWrittenAuthor = Object.entries(authorCounts).reduce(
+    (mostSoFar, [author, count]) =>
+      count > mostSoFar.count ? { author, count } : mostSoFar,
+    { author: "", count: 0 }
+  );
+
+  return { author: mostWrittenAuthor.author, blogs: mostWrittenAuthor.count };
+};
+
 module.exports = {
   dummy,
   totalLikes,
   favouriteBlog,
+  mostBlogs,
 };
