@@ -2,8 +2,8 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-  "title": "New Blog Post",
-  "author": "John Doe",
-  "url": "https://example.com/new-blog-post",
-  "likes": 0
+  "title": "Hello Async/Await",
+  "author": "Jane Doe",
+  "url": "https://example.com/hello-async-await",
+  "likes": 15
 }
