@@ -18,10 +18,12 @@ const initialBlogs = [
 const nonExistingId = async () => {
   const blog = new Blog({
     title: "willremovethissoon",
+    author: "Foo Fighters",
     url: "http://tempurl.com",
+    likes: 0,
   });
   await blog.save();
-  await blog.remove();
+  await blog.deleteOne();
 
   return blog._id.toString();
 };
