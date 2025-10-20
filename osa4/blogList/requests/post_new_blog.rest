@@ -1,10 +1,11 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphbmVkb2UiLCJpZCI6IjY4ZjYzNGRjMjIyMjIzNTY0NTJkYzljMyIsImlhdCI6MTc2MDk3MDI0MywiZXhwIjoxNzYwOTczODQzfQ.co1FUOvcn6qwK3tXHYtPFJDFY7k8VMY-k34AZO1a678
 
 {
-  "title": "Hello UserId",
-  "author": "Donald Duck",
-  "url": "https://example.com/hello-async-await",
-  "likes": 15,
+  "title": "JSON Web Tokens 404",
+  "author": "Jane Doe",
+  "url": "https://example.com/jwt-404",
+  "likes": 8,
   "userId": "68f634b622222356452dc9c0"
 }
