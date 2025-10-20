@@ -2,8 +2,9 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-  "title": "Hello Async/Await",
-  "author": "Jane Doe",
+  "title": "Hello UserId",
+  "author": "Donald Duck",
   "url": "https://example.com/hello-async-await",
-  "likes": 15
+  "likes": 15,
+  "userId": "68f634b622222356452dc9c0"
 }
